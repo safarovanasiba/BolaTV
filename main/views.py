@@ -20,49 +20,41 @@ VIDEO_CATEGORIES = {
 }
 
 
-# ✅ Foydalanuvchini tekshirish
-def is_authenticated(request):
-    return request.session.get("user_id") is not None
+# # ✅ Foydalanuvchini tekshirish
+# def is_authenticated(request):
+#     return request.session.get("user_id") is not None
 
 
-# ✅ Login qilish
-def UsersViews(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+# # ✅ Login qilish
+# def UsersViews(request):
+#     if request.method == "POST":
+#         username = request.POST.get("username")
+#         password = request.POST.get("password")
 
-        user = Users.objects.filter(username=username).first()
+#         user = Users.objects.filter(username=username).first()
 
-        if user and check_password(password, user.password):
-            request.session["user_id"] = user.id
-            return redirect("dashboard")
+#         if user and check_password(password, user.password):
+#             request.session["user_id"] = user.id
+#             return redirect("dashboard")
 
-        return render(request, "login.html", {"error": "Username yoki parol noto‘g‘ri!"})
+#         return render(request, "login.html", {"error": "Username yoki parol noto‘g‘ri!"})
 
-    return render(request, "login.html")
+#     return render(request, "login.html")
 
 
 def dashboard(request):
-    user = None
-    if is_authenticated(request):
-        user = Users.objects.get(id=request.session["user_id"])
-    return render(request, "dashboard.html", {"user": user, "video_categories": VIDEO_CATEGORIES})
+    return render(request, "dashboard.html", {"video_categories": VIDEO_CATEGORIES})
 
 
 # ✅ Videolarni ro‘yxatini chiqarish (Barcha kategoriyalar uchun)
 def video_list(request, category):
-    if not is_authenticated(request):
-        return redirect("user")
-
-    user = Users.objects.get(id=request.session["user_id"])
-
     # Model va ko‘rilgan videolarni aniqlash
     VideoModel, WatchedModel = VIDEO_CATEGORIES.get(category, (None, None))
     if not VideoModel:
         return redirect("dashboard")
 
     # Foydalanuvchi ko‘rgan videolar
-    watched_videos = list(WatchedModel.objects.filter(user=user, watched=True).values_list("video__order", flat=True))
+    watched_videos = list(WatchedModel.objects.filter(watched=True).values_list("video__order", flat=True))
 
     # Eng birinchi video har doim ochiq bo‘lishi kerak
     min_order = VideoModel.objects.aggregate(min_order=Min("order"))["min_order"]
@@ -78,11 +70,6 @@ def video_list(request, category):
 
 # ✅ Videoni ko‘rish (Barcha kategoriyalar uchun)
 def watch_video(request, video_id, category):
-    if not is_authenticated(request):
-        return redirect("user")
-
-    user = Users.objects.get(id=request.session["user_id"])
-
     # Model va ko‘rilgan videolarni aniqlash
     VideoModel, WatchedModel = VIDEO_CATEGORIES.get(category, (None, None))
     if not VideoModel:
@@ -90,20 +77,20 @@ def watch_video(request, video_id, category):
 
     video = get_object_or_404(VideoModel, id=video_id)
 
-    watched_videos = list(WatchedModel.objects.filter(user=user, watched=True).values_list("video__order", flat=True))
+    watched_videos = list(WatchedModel.objects.filter(watched=True).values_list("video__order", flat=True))
 
     if video.order == 1 or video.order - 1 in watched_videos:
-        WatchedModel.objects.get_or_create(user=user, video=video, watched=True)
+        WatchedModel.objects.get_or_create(video=video, watched=True)
         return render(request, "watch_video.html", {"video": video, "category": category})
 
     return render(request, "video_list.html",
                   {"error": "Avvalgi videoni ko‘rmagansiz!", "videos": VideoModel.objects.all(), "category": category})
 
 
-# ✅ Logout qilish
-def user_logout(request):
-    request.session.flush()
-    return redirect("user")
+# # ✅ Logout qilish
+# def user_logout(request):
+#     request.session.flush()
+#     return redirect("user")
 
 
 def ariza_qoldirish(request):

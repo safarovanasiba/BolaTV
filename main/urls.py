@@ -1,13 +1,11 @@
 from django.urls import path
 
 from . import views
-from .views import UsersViews, video_list, watch_video, dashboard, user_logout, ariza_qoldirish, ariza_tashlandi, \
+from .views import video_list, watch_video, dashboard, ariza_qoldirish, ariza_tashlandi, \
     test_view, test_result, Home
 
 urlpatterns = [
     path("",dashboard, name="home"),
-    path("login/", UsersViews, name="user"),
-    path("logout/", user_logout, name="logout"),
     path("ariza/", ariza_qoldirish, name="ariza_qoldirish"),
     path("ariza/tashlandi/", ariza_tashlandi, name="ariza_tashlandi"),
     path("test/", test_view, name="test"),
