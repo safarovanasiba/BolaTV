@@ -42,13 +42,12 @@ def UsersViews(request):
     return render(request, "login.html")
 
 
-# ✅ Dashboard
 def dashboard(request):
-    if not is_authenticated(request):
-        return redirect("user")
-
-    user = Users.objects.get(id=request.session["user_id"])
+    user = None
+    if is_authenticated(request):
+        user = Users.objects.get(id=request.session["user_id"])
     return render(request, "dashboard.html", {"user": user, "video_categories": VIDEO_CATEGORIES})
+
 
 # ✅ Videolarni ro‘yxatini chiqarish (Barcha kategoriyalar uchun)
 def video_list(request, category):
