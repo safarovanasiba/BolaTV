@@ -5,8 +5,8 @@ from .views import UsersViews, video_list, watch_video, dashboard, user_logout, 
     test_view, test_result, Home
 
 urlpatterns = [
-    path("",Home.as_view(), name="home"),
-    path("user/", UsersViews, name="user"),
+    path("home/",Home.as_view(), name="home"),
+    path("", UsersViews, name="user"),
     path("logout/", user_logout, name="logout"),
     path("ariza/", ariza_qoldirish, name="ariza_qoldirish"),
     path("ariza/tashlandi/", ariza_tashlandi, name="ariza_tashlandi"),
