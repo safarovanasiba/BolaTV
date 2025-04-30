@@ -51,8 +51,8 @@ def dashboard(request):
 
 # ✅ Videolarni ro‘yxatini chiqarish (Barcha kategoriyalar uchun)
 def video_list(request, category):
-    if not is_authenticated(request):
-        return redirect("user")
+    # if not is_authenticated(request):
+    #     return redirect("user")
 
     user = Users.objects.get(id=request.session["user_id"])
 
@@ -78,8 +78,8 @@ def video_list(request, category):
 
 # ✅ Videoni ko‘rish (Barcha kategoriyalar uchun)
 def watch_video(request, video_id, category):
-    if not is_authenticated(request):
-        return redirect("user")
+    # if not is_authenticated(request):
+    #     return redirect("user")
 
     user = Users.objects.get(id=request.session["user_id"])
 
