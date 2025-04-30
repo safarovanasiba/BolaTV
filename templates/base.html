@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}Bola TV{% endblock %}</title>
+    <meta id="description" name="description"
+        content="Bola Tv - bolalar uchun sifatli va foydali bo'lgan ertaklar, multfilmlar, rasm chizish va qolaversa ingliz va rus tili darslari joylashgan.">
+    <meta id="keywords" name="keywords"
+        content="bolatv, Bolatv, BolaTv, bolatv sayti, Bolatv sayti, bolatv.uz, Bolatv.uz">
+    <link rel="website icon" href="{% static './img/img/favicon.svg' %}" type="svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script defer="defer" src="{% static 'bundle.js' %}"></script>
+    <link href="{% static 'main.css' %}" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-hover: #45a049;
+            --secondary-color: #2196F3;
+            --secondary-hover: #1976D2;
+            --danger-color: #f44336;
+            --danger-hover: #d32f2f;
+            --text-color: #333;
+            --text-light: #666;
+            --bg-color: #f8f9fa;
+            --bg-card: #fff;
+            --bg-header: linear-gradient(to right, #FAEDDD, #DBF0FB);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --shadow-hover: rgba(0, 0, 0, 0.15);
+            --border-color: #e0e0e0;
+            --input-bg: #fff;
+            --input-border: #ccc;
+            --input-focus: #4CAF50;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Back to top button */
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+        }
+        
+        @media (max-width: 768px) {
+            #btn-back-to-top {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="font-signika">
+    <button id="btn-back-to-top" type="button" data-mdb-ripple="true" data-mdb-ripple-color="light"
+        class="fixed z-50 inline-block p-3 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:shadow-lg transition duration-150 ease-in-out">
+        <svg aria-hidden="true" focusable="false" data-prefix="fas" class="w-4 h-4" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path fill="currentColor" d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"></path>
+        </svg>
+    </button>
+    
+    {% block content %}{% endblock %}
+    
+    <script>
+        // Back to top button functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const backToTopButton = document.getElementById('btn-back-to-top');
+            if (backToTopButton) {
+                window.onscroll = function() {
+                    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                        backToTopButton.style.display = 'block';
+                    } else {
+                        backToTopButton.style.display = 'none';
+                    }
+                };
+                
+                backToTopButton.addEventListener('click', function() {
+                    document.body.scrollTop = 0; // For Safari
+                    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+                });
+            }
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

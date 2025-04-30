@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="uz">
+<html lang="uz" class="light">
 <head>
     {% load static %}
     <meta charset="UTF-8">
@@ -21,7 +21,7 @@
     <meta property="og:image:width" content="1036" />
     <meta property="og:image:height" content="416" />
     <meta property="og:image:type" content="image/svg" />
-    <link rel="website icon" href="./img/img/favicon.svg" type="svg">
+    <link rel="website icon" href="{% static './img/img/favicon.svg' %}" type="svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Signika+Negative:wght@400;500;600;700&display=swap"
@@ -36,22 +36,214 @@
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-5XDD1T8MV3');</script>
-    <script defer="defer" src="../static/bundle.js"></script>
-    <link href="../static/main.css" rel="stylesheet">
+    <script defer="defer" src="{% static 'bundle.js' %}"></script>
+    <link href="{% static 'main.css' %}" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-hover: #45a049;
+            --secondary-color: #2196F3;
+            --secondary-hover: #1976D2;
+            --danger-color: #f44336;
+            --danger-hover: #d32f2f;
+            --text-color: #333;
+            --text-light: #666;
+            --bg-color: #f8f9fa;
+            --bg-card: #fff;
+            --bg-header: linear-gradient(to right, #FAEDDD, #DBF0FB);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --shadow-hover: rgba(0, 0, 0, 0.15);
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-right: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px var(--shadow-hover);
+        }
+        
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .username {
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        
+        .user-badge {
+            background-color: var(--secondary-color);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+        
+        .logout-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+        
+        .logout-btn:hover {
+            background-color: var(--danger-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-hover);
+        }
+        
+        .logout-btn i {
+            margin-right: 6px;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Improved category cards */
+        .category-card {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px var(--shadow-color);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px var(--shadow-hover);
+        }
+        
+        .category-card-img {
+            height: 180px;
+            overflow: hidden;
+        }
+        
+        .category-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .category-card:hover .category-card-img img {
+            transform: scale(1.1);
+        }
+        
+        .category-card-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .category-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+        
+        .category-card-text {
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+        
+        .category-card-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .category-card-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+    </style>
 </head>
 <body class="font-signika">
     <button id="btn-back-to-top" type="button" data-mdb-ripple="true" data-mdb-ripple-color="light"
         class="fixed z-50 inline-block p-3 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:shadow-lg transition duration-150 ease-in-out bottom-5 right-5">
         <svg aria-hidden="true" focusable="false" data-prefix="fas" class="w-4 h-4" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-            <path fill="currentColor" d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"></path>
+            <path fill="currentColor" d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4z"></path>
         </svg>
     </button>
+    
     <header class="bg-gradient-to-r from-[#FAEDDD] to-[#DBF0FB] py-7 md:pb-14">
         <div class="w-full max-w-base px-5 mx-auto">
             <div class="flex justify-between items-center md:mb-8">
-                <a class="font-serif font-bold text-2xl sm:text-3xl" href="">Bola Tv</a>
-                <div>
-                    <a class="hidden md:inline-block bg-blue-200 px-5 py-2 rounded transition-all duration-300 hover:bg-green-300 ml-3" href="https://t.me/bolatvuz" target="_blank">
+                <a class="font-serif font-bold text-2xl sm:text-3xl" href="{% url 'dashboard' %}">Bola Tv</a>
+                <div class="flex items-center gap-4">
+                    {% if request.session.user_id %}
+                    <div class="header-right">
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                {{ request.session.username|first|upper }}
+                            </div>
+                            <div class="user-details">
+                                <span class="username">{{ request.session.username }}</span>
+                                {% if request.session.is_admin %}
+                                <span class="user-badge">Admin</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <a href="{% url 'logout' %}" class="logout-btn">
+                            <i class="fa fa-sign-out-alt"></i> Chiqish
+                        </a>
+                    </div>
+                    {% endif %}
+                    <a class="hidden md:inline-block bg-blue-200 px-5 py-2 rounded transition-all duration-300 hover:bg-green-300 ml-3" href="https://t.me/Bolaatv" target="_blank">
                         <i class="fa-brands fa-telegram mr-2"></i> <span>Obuna bo'lish</span>
                     </a>
                 </div>
@@ -61,15 +253,15 @@
             </div>
             <nav class="hidden md:flex justify-center items-center px-5 py-3 bg-white rounded-lg shadow-md">
                 <ul class="flex flex-wrap gap-x-9">
-                    <li><a class="text-xl text-green-600 font-medium" href="{% url 'dashboard' %}">Bosh sahifa</a></li>
-                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600" href="{% url 'video_list' category='ertaklar' %}">Ertaklar</a></li>
-                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600" href="{% url 'video_list' category='multfilmlar' %}">Multfilm</a></li>
-                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600" href="{% url 'video_list' category='qoshiqlar' %}">Qo'shiqlar</a></li>
-                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600" href="{% url 'video_list' category='matematika' %}">Qiziqarli matematika</a></li>
-                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600" href="{% url 'video_list' category='ingliztili' %}">Ingliz tili</a></li>
-                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600" href="{% url 'video_list' category='badantarbiya' %}">Badantarbiya</a></li>
-                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600" href="{% url 'video_list' category='rasmlar' %}">Rasm</a></li>
-                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600" href="{% url 'ariza_qoldirish' %}">Murojaat</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if request.path == '/dashboard/' %}text-green-600{% endif %}" href="{% url 'dashboard' %}">Bosh sahifa</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if request.path == '/video_list/ertaklar/' %}text-green-600{% endif %}" href="{% url 'video_list' category='ertaklar' %}">Ertaklar</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if request.path == '/video_list/multfilmlar/' %}text-green-600{% endif %}" href="{% url 'video_list' category='multfilmlar' %}">Multfilm</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if request.path == '/video_list/qoshiqlar/' %}text-green-600{% endif %}" href="{% url 'video_list' category='qoshiqlar' %}">Qo'shiqlar</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if request.path == '/video_list/matematika/' %}text-green-600{% endif %}" href="{% url 'video_list' category='matematika' %}">Qiziqarli matematika</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if request.path == '/video_list/ingliztili/' %}text-green-600{% endif %}" href="{% url 'video_list' category='ingliztili' %}">Ingliz tili</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if request.path == '/video_list/badantarbiya/' %}text-green-600{% endif %}" href="{% url 'video_list' category='badantarbiya' %}">Badantarbiya</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if request.path == '/video_list/rasmlar/' %}text-green-600{% endif %}" href="{% url 'video_list' category='rasmlar' %}">Rasm</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if request.path == '/ariza_qoldirish/' %}text-green-600{% endif %}" href="{% url 'ariza_qoldirish' %}">Murojaat</a></li>
                 </ul>
             </nav>
         </div>
@@ -80,18 +272,36 @@
             <div id="overl" class="bg-white/20 fixed top-0 h-full w-full"></div>
             <div class="flex flex-col max-w-[320px] h-full overflow-auto bg-white pt-5 px-6 pb-14 fixed">
                 <div class="pt-4 pb-5 border-b">
-                    <a class="font-serif font-bold text-2xl sm:text-3xl text-br-green" href="index.html">Bola Tv</a>
+                    <a class="font-serif font-bold text-2xl sm:text-3xl text-br-green" href="{% url 'dashboard' %}">Bola Tv</a>
                 </div>
+                {% if request.session.user_id %}
+                <div class="py-3 border-b">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="user-avatar">
+                            {{ request.session.username|first|upper }}
+                        </div>
+                        <div class="user-details">
+                            <span class="username">{{ request.session.username }}</span>
+                            {% if request.session.is_admin %}
+                            <span class="user-badge">Admin</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <a href="{% url 'logout' %}" class="logout-btn block w-full text-center">
+                        <i class="fa fa-sign-out-alt"></i> Chiqish
+                    </a>
+                </div>
+                {% endif %}
                 <ul id="mobile-nav" class="flex flex-col w-full h-auto border-b divide-y divide-dashed">
-                    <li class="py-1"><a class="inline-block w-full active text-xl font-medium text-green-600" href="index.html">Bosh sahifa</a></li>
-                    <li class="py-1"><a class="inline-block w-full text-xl font-medium" href="{% url 'video_list' category='ertaklar' %}">Ertaklar</a></li>
-                    <li class="py-1"><a class="inline-block w-full text-xl font-medium" href="{% url 'video_list' category='multfilm' %}">Multfilm</a></li>
-                    <li class="py-1"><a class="inline-block w-full text-xl font-medium" href="{% url 'video_list' category='qoshiqlar' %}">Qo'shiqlar</a></li>
-                    <li class="py-1"><a class="inline-block w-full text-xl font-medium" href="{% url 'video_list' category='matematika' %}">Qiziqarli matematika</a></li>
-                    <li class="py-1"><a class="inline-block w-full text-xl font-medium" href="{% url 'video_list' category='ingliztili' %}">Ingliz tili</a></li>
-                    <li class="py-1"><a class="inline-block w-full text-xl font-medium" href="{% url 'video_list' category='badantarbiya' %}">Badantarbiya</a></li>
-                    <li class="py-1"><a class="inline-block w-full text-xl font-medium" href="{% url 'video_list' category='rasmlar' %}">Rasm</a></li>
-                    <li class="py-1"><a class="inline-block w-full text-xl font-medium" href="{% url 'ariza_qoldirish' %}">Murojaat</a></li>
+                    <li class="py-1"><a class="inline-block w-full active text-xl font-medium text-green-600 {% if request.path == '/dashboard/' %}text-green-600{% endif %}" href="{% url 'dashboard' %}">Bosh sahifa</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if request.path == '/video_list/ertaklar/' %}text-green-600{% endif %}" href="{% url 'video_list' category='ertaklar' %}">Ertaklar</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if request.path == '/video_list/multfilmlar/' %}text-green-600{% endif %}" href="{% url 'video_list' category='multfilmlar' %}">Multfilm</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if request.path == '/video_list/qoshiqlar/' %}text-green-600{% endif %}" href="{% url 'video_list' category='qoshiqlar' %}">Qo'shiqlar</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if request.path == '/video_list/matematika/' %}text-green-600{% endif %}" href="{% url 'video_list' category='matematika' %}">Qiziqarli matematika</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if request.path == '/video_list/ingliztili/' %}text-green-600{% endif %}" href="{% url 'video_list' category='ingliztili' %}">Ingliz tili</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if request.path == '/video_list/badantarbiya/' %}text-green-600{% endif %}" href="{% url 'video_list' category='badantarbiya' %}">Badantarbiya</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if request.path == '/video_list/rasmlar/' %}text-green-600{% endif %}" href="{% url 'video_list' category='rasmlar' %}">Rasm</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if request.path == '/ariza_qoldirish/' %}text-green-600{% endif %}" href="{% url 'ariza_qoldirish' %}">Murojaat</a></li>
                 </ul>
                 <a class="mt-5 bg-blue-200 px-5 py-2 rounded transition-all duration-300 hover:bg-green-300" href="https://t.me/bolatvuz" target="_blank">
                     <i class="fa-brands fa-telegram mr-2"></i> <span>Obuna bo'lish</span>
@@ -197,7 +407,7 @@
                             height="100"> <img class="w-full h-full" src="{% static './img/img/ranglar.jpg' %}" alt="Inglizcha ranglar"
                             width="300" height="100"> <img class="w-full h-full" src="{% static './img/img/fasllar.jpg' %}"
                             alt="Inglizcha fasllar" width="300" height="100"></div>
-                    <div class="w-full flex flex-col justify-center items-center md:W-1/2">
+                    <div class="w-full flex flex-col justify-center items-center md:w-1/2">
                         <h2 class="font-bold text-br-violet text-3xl mb-5 text-center">Ingliz tili</h2>
                         <p class="text-lg text-center mb-5">Ushbu sahifada bolalar uchun mo'ljallangan ingliz tilidagi
                             qiziqarli darslar bilan tanishishingiz mumkin. Sahifada ingliz tilidagi alifbo, sonlar,
@@ -275,9 +485,29 @@
         </section>
     </main>
     <footer class="shadow-2xl py-8">
-        <p class="text-lg font-bold text-center text-br-green sm:text-xl md:text-2xl">Bola Tv ©2022 year | Created by
+        <p class="text-lg font-bold text-center text-br-green sm:text-xl md:text-2xl">Bola Tv 2025 year | Created by
             Andarov</p>
     </footer>
-    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9385a551fc30b0b2',t:'MTc0NjAwMTQ5Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.getElementById('menu');
+            const mobileMenu = document.getElementById('open-menu');
+            const exitButton = document.getElementById('mob-exit');
+            const overlay = document.getElementById('overl');
+            
+            menuButton.addEventListener('click', function() {
+                mobileMenu.classList.remove('-translate-x-full');
+            });
+            
+            exitButton.addEventListener('click', function() {
+                mobileMenu.classList.add('-translate-x-full');
+            });
+            
+            overlay.addEventListener('click', function() {
+                mobileMenu.classList.add('-translate-x-full');
+            });
+        });
+    </script>
 </body>
 </html>

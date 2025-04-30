@@ -1,14 +1,496 @@
 <!DOCTYPE html>
-<html lang="uz" xmlns="http://www.w3.org/1999/html">
+<html lang="uz">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <meta name="description" content="Bola Tv - bolalar uchun sifatli va foydali bo'lgan ertaklar, multfilmlar, rasm chizish va qolaversa ingliz va rus tili darslari joylashgan.">
+    <meta name="keywords" content="bolatv, Bolatv, BolaTv, bolatv sayti, Bolatv sayti, bolatv.uz, Bolatv.uz">
+    <title>Bola TV - Bolalar uchun ta'lim platformasi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Signika Negative', sans-serif;
+        }
+        body {
+            background: linear-gradient(to right, #FAEDDD, #DBF0FB);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            padding: 1.5rem 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .nav-link {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1.1rem;
+        }
+        .nav-link:hover {
+            color: #4CAF50;
+        }
+        .nav-link.highlight {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+        }
+        .nav-link.highlight:hover {
+            background-color: #45a049;
+        }
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://img.freepik.com/free-vector/hand-drawn-colorful-education-background_23-2149143493.jpg?w=1380&t=st=1714492315~exp=1714492915~hmac=8b1b2a2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+            line-height: 1.2;
+            max-width: 800px;
+        }
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin-bottom: 2.5rem;
+            color: #555;
+            line-height: 1.6;
+        }
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+        .feature-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 320px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+            z-index: -1;
+        }
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            color: #4CAF50;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            padding: 1.5rem;
+            border-radius: 50%;
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .feature-desc {
+            color: #666;
+            line-height: 1.6;
+        }
+        .categories-section {
+            background-color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+            border-radius: 2px;
+        }
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .category-card {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 1.5rem;
+            width: 200px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .category-card:hover {
+            background-color: #4CAF50;
+            transform: scale(1.05);
+        }
+        .category-card:hover .category-icon,
+        .category-card:hover .category-name {
+            color: white;
+        }
+        .category-icon {
+            font-size: 2.5rem;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+            transition: color 0.3s ease;
+        }
+        .category-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+        .cta-section {
+            padding: 5rem 2rem;
+            text-align: center;
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('https://img.freepik.com/free-vector/children-playing-playground_1308-43710.jpg?w=1380&t=st=1714492415~exp=1714493015~hmac=8b1b2a2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        .cta-desc {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            color: #555;
+            line-height: 1.6;
+        }
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+        .btn-primary:hover {
+            background-color: #45a049;
+            transform: translateY(-5px);
+            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.5);
+        }
+        .btn-secondary {
+            background-color: white;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        .btn-secondary:hover {
+            background-color: #f9f9f9;
+            transform: translateY(-5px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background-color: #333;
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-link {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-link:hover {
+            color: #4CAF50;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .social-link {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        .social-link:hover {
+            color: #4CAF50;
+        }
+        .copyright {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .feature-card {
+                width: 100%;
+                max-width: 350px;
+            }
+            .categories {
+                gap: 1rem;
+            }
+            .category-card {
+                width: 150px;
+            }
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<a href="{% url 'user' %}">
-    <button>
-        Kirish
-    </button>
-</a>
+    <header>
+        <div class="header-container">
+            <a href="{% url 'home' %}" class="logo">Bola TV</a>
+            <div class="nav-links">
+                <a href="{% url 'home' %}" class="nav-link">Bosh sahifa</a>
+                <a href="https://t.me/Bolaatv" target="_blank" class="nav-link">Telegram</a>
+                <a href="{% url 'login' %}" class="nav-link highlight">Kirish</a>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h1>Bolalar uchun eng yaxshi ta'lim platformasi</h1>
+            <p>Bola TV - bolalar uchun sifatli va foydali bo'lgan ertaklar, multfilmlar, rasm chizish va qolaversa ingliz va rus tili darslari joylashgan platformaga xush kelibsiz!</p>
+            
+            <div class="cta-buttons">
+                <a href="{% url 'login' %}" class="btn btn-primary">Kirish</a>
+                <a href="{% url 'register' %}" class="btn btn-secondary">Ro'yxatdan o'tish</a>
+            </div>
+        </section>
+        
+        <section>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="feature-title">Ertaklar</h3>
+                    <p class="feature-desc">Bolalar uchun qiziqarli va ma'naviy ertaklar to'plami. Har bir ertak orqali bolalar yangi bilim va hayotiy saboqlarni o'rganadilar.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    <h3 class="feature-title">Multfilmlar</h3>
+                    <p class="feature-desc">Sifatli va mazmunli multfilmlar kolleksiyasi. Bolalar sevimli qahramonlari bilan birga vaqt o'tkazib, yangi narsalarni kashf etadilar.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3 class="feature-title">Ingliz tili</h3>
+                    <p class="feature-desc">Bolalar uchun maxsus ingliz tili darslari. Qiziqarli va interaktiv usulda chet tilini o'rganish imkoniyati.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="categories-section">
+            <h2 class="section-title">Bizning kategoriyalar</h2>
+            <div class="categories">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="category-name">Ertaklar</div>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    <div class="category-name">Multfilmlar</div>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <div class="category-name">Qo'shiqlar</div>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="category-name">Matematika</div>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <div class="category-name">Ingliz tili</div>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <div class="category-name">Badantarbiya</div>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <div class="category-name">Rasmlar</div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="cta-section">
+            <h2 class="cta-title">Hoziroq boshlang!</h2>
+            <p class="cta-desc">Farzandingiz uchun eng yaxshi ta'lim platformasiga qo'shiling va ularning rivojlanishiga hissa qo'shing.</p>
+            <div class="cta-buttons">
+                <a href="{% url 'login' %}" class="btn btn-primary">Kirish</a>
+                <a href="{% url 'register' %}" class="btn btn-secondary">Ro'yxatdan o'tish</a>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Bola TV</div>
+            <div class="footer-links">
+                <a href="{% url 'home' %}" class="footer-link">Bosh sahifa</a>
+                <a href="{% url 'login' %}" class="footer-link">Kirish</a>
+                <a href="{% url 'register' %}" class="footer-link">Ro'yxatdan o'tish</a>
+            </div>
+            <div class="social-links">
+                <a href="https://t.me/Bolaatv" target="_blank" class="social-link"><i class="fab fa-telegram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="copyright">Bola Tv  2025 | Created by Andarov</p>
+        </div>
+    </footer>
 </body>
+</html>

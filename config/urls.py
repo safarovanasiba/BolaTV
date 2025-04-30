@@ -15,9 +15,36 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
+from django.conf.urls import handler404
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from main.views import dashboard
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="BolaTV API",
+        default_version='v1',
+        description="API for BolaTV application",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@bolatv.local"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
+    # Admin site
     path("admin/", admin.site.urls),
-    path("",include('main.urls'))
+    
+    # Swagger documentation - these must come before main app URLs
+    path('swagger.json', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger.yaml', schema_view.without_ui(cache_timeout=0), name='schema-yaml'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    
+    # Main app URLs - this must come last
+    path("", include('main.urls')),
 ]

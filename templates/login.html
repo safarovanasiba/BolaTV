@@ -1,0 +1,41 @@
+{% extends 'auth_base.html' %}
+
+{% block title %}Kirish - Bola TV{% endblock %}
+
+{% block content %}
+<h2 class="auth-title text-2xl">Tizimga kirish</h2>
+
+{% if form.errors %}
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    <p>Foydalanuvchi nomi yoki parol noto'g'ri.</p>
+</div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="{{ form.username.id_for_label }}">Foydalanuvchi nomi</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+        <div class="error-message">{{ form.username.errors.0 }}</div>
+        {% endif %}
+    </div>
+    
+    <div class="form-group">
+        <label for="{{ form.password.id_for_label }}">Parol</label>
+        {{ form.password }}
+        {% if form.password.errors %}
+        <div class="error-message">{{ form.password.errors.0 }}</div>
+        {% endif %}
+    </div>
+    
+    <div class="form-group">
+        <button type="submit" class="btn-primary">Kirish</button>
+    </div>
+</form>
+
+<div class="auth-footer">
+    <p>Hisobingiz yo'qmi? <a href="{% url 'register' %}" class="auth-link">Ro'yxatdan o'tish</a></p>
+</div>
+{% endblock %}

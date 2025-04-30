@@ -4,22 +4,269 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ariza Yuborildi</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ariza Yuborildi - Bola TV</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="{% static 'main.css' %}" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Signika Negative', sans-serif;
+        }
+        body {
+            background: linear-gradient(to right, #FAEDDD, #DBF0FB);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        .success-container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .success-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+        }
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem;
+            background-color: rgba(76, 175, 80, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+        .success-icon i {
+            font-size: 3rem;
+            color: #4CAF50;
+        }
+        .success-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .success-details {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        .detail-item {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: flex-start;
+        }
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+        .detail-icon {
+            color: #4CAF50;
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        .detail-text {
+            color: #555;
+            font-size: 1.1rem;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.4);
+        }
+        .btn i {
+            margin-right: 8px;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #4CAF50;
+            opacity: 0.8;
+            animation: confetti 5s ease-in-out infinite;
+        }
+        .confetti:nth-child(1) {
+            left: 10%;
+            top: -20px;
+            animation-delay: 0s;
+        }
+        .confetti:nth-child(2) {
+            left: 20%;
+            top: -20px;
+            background-color: #8BC34A;
+            animation-delay: 0.5s;
+        }
+        .confetti:nth-child(3) {
+            left: 30%;
+            top: -20px;
+            background-color: #FFC107;
+            animation-delay: 1s;
+        }
+        .confetti:nth-child(4) {
+            left: 40%;
+            top: -20px;
+            background-color: #2196F3;
+            animation-delay: 1.5s;
+        }
+        .confetti:nth-child(5) {
+            left: 50%;
+            top: -20px;
+            background-color: #9C27B0;
+            animation-delay: 2s;
+        }
+        .confetti:nth-child(6) {
+            left: 60%;
+            top: -20px;
+            background-color: #F44336;
+            animation-delay: 2.5s;
+        }
+        .confetti:nth-child(7) {
+            left: 70%;
+            top: -20px;
+            background-color: #FF9800;
+            animation-delay: 3s;
+        }
+        .confetti:nth-child(8) {
+            left: 80%;
+            top: -20px;
+            background-color: #03A9F4;
+            animation-delay: 3.5s;
+        }
+        .confetti:nth-child(9) {
+            left: 90%;
+            top: -20px;
+            background-color: #E91E63;
+            animation-delay: 4s;
+        }
+        @keyframes confetti {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(500px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+            }
+        }
+        @media (max-width: 768px) {
+            .success-container {
+                padding: 2rem;
+            }
+            .success-icon {
+                width: 80px;
+                height: 80px;
+            }
+            .success-icon i {
+                font-size: 2.5rem;
+            }
+            .success-title {
+                font-size: 1.8rem;
+            }
+            .success-message {
+                font-size: 1rem;
+            }
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
-<body class="font-signika bg-gray-100 flex items-center justify-center h-screen">
+<body>
+    <!-- Confetti animation elements -->
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
 
-    <div class="bg-white shadow-lg rounded-xl p-8 text-center max-w-lg w-full">
-        <img src="{% static 'img/img/success.png' %}" alt="Success" class="w-24 h-24 mx-auto mb-4">
-        <h2 class="text-2xl font-bold text-br-green">Rahmat! ✅</h2>
-        <p class="text-lg text-gray-600 mt-2">Sizning arizangiz muvaffaqiyatli qabul qilindi.</p>
-
-        <div style="position: relative; background-color: blue; top: 10px;" class="mt-6">
-            <a href="{% url 'dashboard' %}" class="bg-blue-500 text-white px-6 py-3 rounded-lg text-lg transition-all duration-300 hover:bg-blue-600">
-                🔙 Bosh sahifaga qaytish
-            </a>
+    <div class="success-container">
+        <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
         </div>
+        
+        <h1 class="success-title">Rahmat!</h1>
+        <p class="success-message">Sizning arizangiz muvaffaqiyatli qabul qilindi. Tez orada siz bilan bog'lanamiz.</p>
+        
+        <div class="success-details">
+            <div class="detail-item">
+                <i class="fas fa-check detail-icon"></i>
+                <span class="detail-text">Arizangiz tizimga saqlandi</span>
+            </div>
+            <div class="detail-item">
+                <i class="fas fa-clock detail-icon"></i>
+                <span class="detail-text">Javob berish vaqti: 24-48 soat ichida</span>
+            </div>
+            <div class="detail-item">
+                <i class="fas fa-envelope detail-icon"></i>
+                <span class="detail-text">Javob telefon raqamingizga yuboriladi</span>
+            </div>
+        </div>
+        
+        <a href="{% url 'dashboard' %}" class="btn">
+            <i class="fas fa-home"></i> Bosh sahifaga qaytish
+        </a>
     </div>
-
 </body>
 </html>

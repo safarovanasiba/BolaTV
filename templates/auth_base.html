@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="uz">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta id="description" name="description"
+        content="Bola Tv - bolalar uchun sifatli va foydali bo'lgan ertaklar, multfilmlar, rasm chizish va qolaversa ingliz va rus tili darslari joylashgan.">
+    <meta id="keywords" name="keywords"
+        content="bolatv, Bolatv, BolaTv, bolatv sayti, Bolatv sayti, bolatv.uz, Bolatv.uz">
+    <title>{% block title %}Bola TV{% endblock %}</title>
+    <link rel="website icon" href="{% static './img/img/favicon.svg' %}" type="svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script defer="defer" src="{% static 'bundle.js' %}"></script>
+    <link href="{% static 'main.css' %}" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Signika Negative', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #FAEDDD 0%, #DBF0FB 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://img.freepik.com/free-vector/hand-drawn-colorful-education-background_23-2149143493.jpg?w=1380&t=st=1714492315~exp=1714492915~hmac=8b1b2a2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.05;
+            z-index: -1;
+        }
+        header {
+            padding: 1.5rem 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4CAF50;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-icon {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .nav-link {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1.1rem;
+        }
+        .nav-link:hover {
+            color: #4CAF50;
+        }
+        .auth-container {
+            max-width: 500px;
+            margin: 2rem auto 4rem;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+        }
+        .auth-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 2rem;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        .auth-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+            border-radius: 2px;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+        .form-control {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+        }
+        .form-control:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+            outline: none;
+            background-color: white;
+        }
+        .btn-primary {
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(to right, #45a049, #7CB342);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.4);
+        }
+        .auth-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+        .auth-link {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .auth-link:hover {
+            color: #45a049;
+            text-decoration: underline;
+        }
+        .error-message {
+            color: #f44336;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .error-message::before {
+            content: '\f071';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+        }
+        .auth-social {
+            margin: 1.5rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        .social-btn.telegram {
+            background-color: #0088cc;
+        }
+        .social-btn.facebook {
+            background-color: #3b5998;
+        }
+        .social-btn.instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: #e0e0e0;
+        }
+        .auth-divider-text {
+            padding: 0 1rem;
+            color: #999;
+            font-size: 0.9rem;
+        }
+        footer {
+            background-color: #333;
+            padding: 2rem;
+            text-align: center;
+            color: white;
+            margin-top: auto;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .footer-link {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-link:hover {
+            color: #4CAF50;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .social-link {
+            color: white;
+            font-size: 1.2rem;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .social-link:hover {
+            background-color: #4CAF50;
+            transform: translateY(-3px);
+        }
+        .copyright {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .auth-container {
+                margin: 1rem auto 3rem;
+                padding: 1.5rem;
+                width: 90%;
+            }
+            .auth-title {
+                font-size: 1.5rem;
+            }
+            .form-control {
+                padding: 0.8rem 1rem;
+            }
+            .btn-primary {
+                padding: 0.8rem 1.2rem;
+                font-size: 1rem;
+            }
+            .header-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .nav-links {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="{% url 'home' %}" class="logo">
+                <i class="fas fa-child logo-icon"></i>
+                <span>Bola TV</span>
+            </a>
+            <div class="nav-links">
+                <a href="{% url 'home' %}" class="nav-link">Bosh sahifa</a>
+                <a href="https://t.me/Bolaatv" target="_blank" class="nav-link">Telegram</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="auth-container">
+            {% block content %}{% endblock %}
+            
+            <div class="auth-divider">
+                <span class="auth-divider-text">Ijtimoiy tarmoqlar orqali</span>
+            </div>
+            
+            <div class="auth-social">
+                <a href="https://t.me/Bolaatv" target="_blank" class="social-btn telegram">
+                    <i class="fab fa-telegram-plane"></i>
+                </a>
+                <a href="#" class="social-btn facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-btn instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Bola TV</div>
+            <div class="footer-links">
+                <a href="{% url 'home' %}" class="footer-link">Bosh sahifa</a>
+                <a href="{% url 'login' %}" class="footer-link">Kirish</a>
+                <a href="{% url 'register' %}" class="footer-link">Ro'yxatdan o'tish</a>
+            </div>
+            <div class="social-links">
+                <a href="https://t.me/Bolaatv" target="_blank" class="social-link"><i class="fab fa-telegram-plane"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="copyright">Bola TV 2022 | Created by Andarov</p>
+        </div>
+    </footer>
+</body>
+</html>

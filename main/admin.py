@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
-from .models import Users, Ertaklar, WatchedVideo, Multfilmlar, WatchedMultfilm, \
-    Qoshiqlar, WatchedQoshiqlar, Qiziqari_Matematika, WatchedMatematika, \
-    Ingliztili, WatchedIngliztili, Badantarbiya, WatchedBadantarbiya, \
+from django.db.models import Count, Sum
+from .models import (
+    Users, Ertaklar, WatchedVideo, Multfilmlar, WatchedMultfilm,
+    Qoshiqlar, WatchedQoshiqlar, Qiziqari_Matematika, WatchedMatematika,
+    Ingliztili, WatchedIngliztili, Badantarbiya, WatchedBadantarbiya,
     Rasmlar, WatchedRasmlar, Ariza, TestQuestion, TestResult
+)
 
 # 📌 Hamma video turlari uchun umumiy kategoriya
 VIDEO_CATEGORIES = {
@@ -16,10 +19,11 @@ VIDEO_CATEGORIES = {
     "rasmlar": (Rasmlar, WatchedRasmlar),
 }
 
-
-# ✅ **Foydalanuvchi admin paneli (ko‘rilgan videolar foizi bilan)**
+# ✅ **Foydalanuvchi admin paneli (ko'rilgan videolar foizi bilan)**
 class UsersAdmin(admin.ModelAdmin):
-    list_display = ["username"]
+    list_display = ["username", "is_admin", "created_at", "total_watched_percent"]
+    list_filter = ["is_admin", "created_at"]
+    search_fields = ["username"]
 
     def _generate_watched_percent(model, watched_model):
         def watched_percent(self, obj):
@@ -32,15 +36,14 @@ class UsersAdmin(admin.ModelAdmin):
 
         return watched_percent
 
-    total_fields = []
+    # Generate watched percentage methods for each category
     for key, (VideoModel, WatchedModel) in VIDEO_CATEGORIES.items():
         func_name = f"watched_{key}_percent"
         locals()[func_name] = _generate_watched_percent(VideoModel, WatchedModel)
         locals()[func_name].short_description = f"{key.capitalize()} (%)"
         list_display.append(func_name)
-        total_fields.append(func_name)
 
-    # ✅ **Umumiy ko‘rilgan videolar foizi**
+    # ✅ **Umumiy ko'rilgan videolar foizi**
     def total_watched_percent(self, obj):
         total_percent = 0
         category_count = 0
@@ -58,30 +61,54 @@ class UsersAdmin(admin.ModelAdmin):
 
         return f"{(total_percent / category_count):.2f}%"
 
-    total_watched_percent.short_description = "Umumiy Ko‘rilgan (%)"
-    list_display.append("total_watched_percent")
-
+    total_watched_percent.short_description = "Umumiy Ko'rilgan (%)"
 
 # ✅ **Videolar admin paneli (iframe preview bilan)**
 class VideoAdmin(admin.ModelAdmin):
-    list_display = ("title", "video_preview")
+    list_display = ("title", "order", "video_preview", "total_views")
+    search_fields = ["title"]
+    list_filter = ["order"]
 
     def video_preview(self, obj):
-        """YouTube video previewni admin panelda ko‘rsatish"""
+        """YouTube video previewni admin panelda ko'rsatish"""
         if obj.embed_video():
             return mark_safe(
                 f'<iframe width="200" height="100" src="{obj.embed_video()}" frameborder="0" allowfullscreen></iframe>')
         return "No Video"
 
     video_preview.short_description = "Video Preview"
+    
+    def get_watched_model(self, obj):
+        for key, (VideoModel, WatchedModel) in VIDEO_CATEGORIES.items():
+            if isinstance(obj, VideoModel):
+                return WatchedModel
+        return None
+    
+    def total_views(self, obj):
+        watched_model = self.get_watched_model(obj)
+        if watched_model:
+            return watched_model.objects.filter(video=obj).aggregate(total=Sum('watch_count'))['total'] or 0
+        return 0
+    
+    total_views.short_description = "Total Views"
 
+# ✅ **Ko'rilgan videolar admin paneli**
+class WatchedVideoAdmin(admin.ModelAdmin):
+    list_display = ("user", "video", "watched", "watch_count", "watched_at")
+    list_filter = ["watched", "watched_at", "user"]
+    search_fields = ["user__username", "video__title"]
+    raw_id_fields = ["user", "video"]
 
-# 📌 **Admin panelga hamma modellarni avtomatik ro‘yxatdan o‘tkazamiz**
+# 📌 **Admin panelga hamma modellarni ro'yxatdan o'tkazamiz**
 admin.site.register(Users, UsersAdmin)
 
+# Register video models
 for key, (VideoModel, _) in VIDEO_CATEGORIES.items():
     admin.site.register(VideoModel, VideoAdmin)
 
+# Register watched video models
+for _, (_, WatchedModel) in VIDEO_CATEGORIES.items():
+    admin.site.register(WatchedModel, WatchedVideoAdmin)
 
 class ArizaAdmin(admin.ModelAdmin):
     list_display = ("full_name", "phone_number", "created_at")
@@ -96,7 +123,6 @@ class TestResultAdmin(admin.ModelAdmin):
     list_filter = ("created_at",)
     search_fields = ("user__username",)
 
-admin.site.register(TestQuestion, TestQuestionAdmin)  # ✅ TestQuestion alohida ro‘yxatdan o‘tgan
+admin.site.register(TestQuestion, TestQuestionAdmin)
 admin.site.register(TestResult, TestResultAdmin)
-
 admin.site.register(Ariza, ArizaAdmin)
