@@ -1,41 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BolaTV - Live Sports Streaming</title>
-    <link rel="stylesheet" href="/static/main.css">
-</head>
-<body>
-    <header class="bg-gradient-to-r from-[#FAEDDD] to-[#DBF0FB] py-5 px-8">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold">BolaTV</div>
-            <nav>
-                <ul class="flex space-x-3">
-                    <li><a href="/" class="font-medium hover:text-green-600">Home</a></li>
-                    <li><a href="/admin/" class="font-medium hover:text-green-600">Admin</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    
-    <main class="container mx-auto py-7 px-5">
-        <section class="text-center mb-10">
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-5">Welcome to BolaTV</h1>
-            <p class="max-w-3xl mx-auto">Your one-stop destination for live sports streaming</p>
-        </section>
+{% extends 'base.html' %}
+
+{% block title %}BolaTV - Live Sports Streaming{% endblock %}
+
+{% block content %}
+<section class="text-center mb-10">
+    <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-5">Welcome to BolaTV</h1>
+    <p class="max-w-3xl mx-auto">Your one-stop destination for live sports streaming</p>
+</section>
         
-        <section class="max-w-3xl mx-auto bg-white p-5 rounded-lg shadow-md">
-            <h2 class="text-xl font-bold mb-3">Application Status</h2>
-            <p>The application is up and running!</p>
-            <p class="mt-2">Check the <a href="/health/" class="text-green-600 underline">health page</a> for more details.</p>
-        </section>
-    </main>
-    
-    <footer class="bg-slate-50 py-5 px-8 mt-5">
-        <div class="container mx-auto text-center">
-            <p>© 2025 BolaTV. All rights reserved.</p>
-        </div>
-    </footer>
-</body>
-</html>
+<section class="max-w-3xl mx-auto bg-white p-5 rounded-lg shadow-md">
+    <h2 class="text-xl font-bold mb-3">Application Status</h2>
+    <p>The application is up and running!</p>
+    <p class="mt-2">Check the <a href="/health/" class="text-green-600 underline">health page</a> for more details.</p>
+</section>
+{% endblock %}

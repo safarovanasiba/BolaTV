@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{% block title %}Bola TV{% endblock %}</title>
+    <title>{% block title %}BolaTV{% endblock %}</title>
     <meta id="description" name="description"
         content="Bola Tv - bolalar uchun sifatli va foydali bo'lgan ertaklar, multfilmlar, rasm chizish va qolaversa ingliz va rus tili darslari joylashgan.">
     <meta id="keywords" name="keywords"
@@ -69,14 +69,53 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body class="font-signika">
+    <header class="bg-gradient-to-r from-[#FAEDDD] to-[#DBF0FB] py-7 md:pb-14">
+        <div class="w-full max-w-base px-5 mx-auto">
+            <div class="flex justify-between items-center md:mb-8">
+                <a class="font-serif font-bold text-2xl sm:text-3xl" href="{% url 'dashboard' %}">Bola Tv</a>
+                <div class="flex items-center gap-4">
+                    {% if request.session.user_id %}
+                    <div class="header-right">
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                {{ request.session.username|first|upper }}
+                            </div>
+                            <div class="user-details">
+                                <span class="username">{{ request.session.username }}</span>
+                                {% if request.session.is_admin %}
+                                <span class="user-badge">Admin</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <a href="{% url 'logout' %}" class="logout-btn">
+                            <i class="fa fa-sign-out-alt"></i> Chiqish
+                        </a>
+                    </div>
+                    {% endif %}
+                    <a class="hidden md:inline-block bg-blue-200 px-5 py-2 rounded transition-all duration-300 hover:bg-green-300 ml-3" href="https://t.me/Bolaatv" target="_blank">
+                        <i class="fa-brands fa-telegram mr-2"></i> <span>Obuna bo'lish</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-7 px-5">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-slate-50 py-5 px-8 mt-5">
+        <div class="container mx-auto text-center">
+            <p>© {% now "Y" %} BolaTV. All rights reserved.</p>
+        </div>
+    </footer>
+
     <button id="btn-back-to-top" type="button" data-mdb-ripple="true" data-mdb-ripple-color="light"
         class="fixed z-50 inline-block p-3 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:shadow-lg transition duration-150 ease-in-out">
         <svg aria-hidden="true" focusable="false" data-prefix="fas" class="w-4 h-4" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
             <path fill="currentColor" d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"></path>
         </svg>
     </button>
-    
-    {% block content %}{% endblock %}
     
     <script>
         // Back to top button functionality

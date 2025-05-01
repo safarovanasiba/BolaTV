@@ -71,12 +71,6 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
-            'loaders': [
-                ('django.template.loaders.cached.Loader', [
-                    'django.template.loaders.filesystem.Loader',
-                    'django.template.loaders.app_directories.Loader',
-                ]),
-            ],
         },
     },
 ]
@@ -154,27 +148,28 @@ CACHES = {
     }
 }
 
-# Update CSRF settings for security
+# Update CSRF settings for security with your production domains
 CSRF_TRUSTED_ORIGINS = ['https://*.railway.app', 'https://*.up.railway.app']
 
-# Optimize logging - reduce overhead
+# Production-focused logging - minimal overhead
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'level': 'ERROR',
+        'null': {
+            'class': 'logging.NullHandler',
         },
     },
     'root': {
-        'handlers': ['console'],
-        'level': 'ERROR',
+        'handlers': ['null'],
+        'level': 'CRITICAL',
     },
 }
 
-# Optimize sessions
+# Optimize sessions for production
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_CACHE_ALIAS = "default"
 SESSION_COOKIE_AGE = 86400  # 1 day in seconds
-SESSION_SAVE_EVERY_REQUEST = True
+SESSION_SAVE_EVERY_REQUEST = False  # Changed to False for better performance
+SESSION_COOKIE_SECURE = True  # Only send cookies over HTTPS
+SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access to cookies
