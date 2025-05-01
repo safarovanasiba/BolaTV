@@ -28,10 +28,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-default-key-for-development')
 
 # Turn off DEBUG in production for better performance
-DEBUG = False
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 # Allow all hosts but be specific about CSRF trusted origins for security
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'bolatv-production.up.railway.app']
 
 # Application definition
 
@@ -130,7 +130,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),  # ✅ Statik fayllarni yuklash
+    os.path.join(BASE_DIR, "static"),  # Statik fayllarni yuklash
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
