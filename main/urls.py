@@ -11,7 +11,7 @@ from .api_views import (
     IngliztiliViewSet, BadantarbiyaViewSet, RasmlarViewSet, ArizaViewSet,
     TestQuestionViewSet, TestResultViewSet, api_root
 )
-from .debug_views import health_check  # Add this line
+from .debug_views import health_check
 
 # API router setup
 router = DefaultRouter()
@@ -28,7 +28,7 @@ router.register('test-results', TestResultViewSet)
 
 # Main URL patterns
 urlpatterns = [
-    # Add this line at the top for debugging
+    # Add health check endpoint at the top
     path("health/", health_check, name="health_check"),
     
     # Authentication endpoints

@@ -1,1 +1,1 @@
-web: gunicorn config.wsgi --timeout 60
+web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi --log-level debug --timeout 120
