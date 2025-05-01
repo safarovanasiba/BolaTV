@@ -1,1 +1,1 @@
-web: python manage.py collectstatic --noinput && python manage.py ensure_superuser && python manage.py migrate && gunicorn config.wsgi:application --log-file=- --timeout=120 --workers=2
+web: python manage.py collectstatic --noinput && python manage.py ensure_superuser && python manage.py migrate && gunicorn config.wsgi:application --log-file=- --timeout=30 --workers=2 --threads=4 --worker-class=gthread --preload

@@ -28,22 +28,20 @@ router.register('test-results', TestResultViewSet)
 
 # Main URL patterns
 urlpatterns = [
-    # Health check endpoint - must be at the top for Railway
+    # Health check endpoints - must be at the top for fast response
     path("health/", health_check, name="health_check"),
-    path("healthz/", health_check, name="healthz"),  # Alternative path
-    path("ready/", health_check, name="ready"),      # Kubernetes-style readiness
-    path("live/", health_check, name="live"),        # Kubernetes-style liveness
+    path("healthz/", health_check, name="healthz"),
+    path("ready/", health_check, name="ready"),
+    path("live/", health_check, name="live"),
     
-    # Authentication endpoints
+    # Critical user flows
     path("login/", login_view, name="login"),
-    path("register/", register_view, name="register"),
     path("logout/", logout_view, name="logout"),
-    
-    # Home page (landing page for non-authenticated users)
     path("", Home.as_view(), name="home"),
-    
-    # Web UI endpoints - these require authentication
     path("dashboard/", dashboard, name="dashboard"),
+    
+    # Secondary flows - can be loaded after initial rendering
+    path("register/", register_view, name="register"),
     path("ariza/", ariza_qoldirish, name="ariza_qoldirish"),
     path("ariza/tashlandi/", ariza_tashlandi, name="ariza_tashlandi"),
     path("test/", test_view, name="test"),

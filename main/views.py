@@ -5,6 +5,8 @@ from django.views.generic import TemplateView
 from django.contrib.auth.hashers import check_password
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 from .models import *
 from .forms import ArizaForm, TestForm, LoginForm, RegisterForm
@@ -87,7 +89,14 @@ def logout_view(request):
 # 🏠 Bosh sahifa (kategoriya ro'yxati bilan)
 @login_required
 def dashboard(request):
-    return render(request, "dashboard.html", {"video_categories": VIDEO_CATEGORIES})
+    cache_key = f'dashboard_user_{request.session.get("user_id")}'
+    context = cache.get(cache_key)
+    
+    if not context:
+        context = {"video_categories": VIDEO_CATEGORIES}
+        cache.set(cache_key, context, 300)  # Cache for 5 minutes
+        
+    return render(request, "dashboard.html", context)
 
 # 📺 Videolar ro'yxati (kategoriya bo'yicha ko'rilgan holatini aniqlash)
 @login_required
@@ -122,7 +131,14 @@ def video_list(request, category):
             video.watch_count = 0
             video.watched = False
 
-    return render(request, "video_list.html", {"videos": videolar, "category": category})
+    cache_key = f'video_list_{category}_{user_id}'
+    context = cache.get(cache_key)
+    
+    if not context:
+        context = {"videos": videolar, "category": category}
+        cache.set(cache_key, context, 120)  # Cache for 2 minutes
+        
+    return render(request, "video_list.html", context)
 
 # ▶️ Video ko'rish (va uni "ko'rilgan" deb belgilash)
 @login_required
@@ -218,10 +234,12 @@ class Home(TemplateView):
             return HttpResponseRedirect(reverse('dashboard'))
         return super().dispatch(request, *args, **kwargs)
 
+@cache_page(60 * 15)  # Cache for 15 minutes
 def index(request):
     """Main homepage view"""
     return render(request, 'index.html')
 
+@cache_page(60 * 60)  # Cache for 1 hour
 def simple_text_response(request):
     """A simple text response that doesn't require templates"""
     return HttpResponse("BolaTV is running. Visit /admin/ for administration.", content_type="text/plain")
