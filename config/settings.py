@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-default-key-for-devel
 DEBUG = False
 
 # Allow specific hosts for security
-ALLOWED_HOSTS = ['bolatv-production.up.railway.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['bolatv-production.up.railway.app', 'bolatv-production-production.up.railway.app', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -133,7 +133,11 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = False  # Railway handles SSL
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = ['https://bolatv-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = [
+    'https://bolatv-production.up.railway.app',
+    'https://bolatv-production-production.up.railway.app',
+    'https://*.up.railway.app'
+]
 
 # Simplified caching
 CACHES = {
