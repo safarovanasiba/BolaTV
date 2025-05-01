@@ -88,18 +88,15 @@ def logout_view(request):
 
 # 🏠 Bosh sahifa (kategoriya ro'yxati bilan)
 @login_required
+@cache_page(60 * 5)  # Cache for 5 minutes
 def dashboard(request):
-    cache_key = f'dashboard_user_{request.session.get("user_id")}'
-    context = cache.get(cache_key)
-    
-    if not context:
-        context = {"video_categories": VIDEO_CATEGORIES}
-        cache.set(cache_key, context, 300)  # Cache for 5 minutes
-        
+    user_id = request.session.get("user_id")
+    context = {"video_categories": VIDEO_CATEGORIES}
     return render(request, "dashboard.html", context)
 
 # 📺 Videolar ro'yxati (kategoriya bo'yicha ko'rilgan holatini aniqlash)
 @login_required
+@cache_page(60 * 5)  # Cache for 5 minutes
 def video_list(request, category):
     VideoModel, WatchedModel = VIDEO_CATEGORIES.get(category, (None, None))
     if not VideoModel or not WatchedModel:
@@ -108,36 +105,49 @@ def video_list(request, category):
     user_id = request.session.get('user_id')
     user = get_object_or_404(Users, id=user_id)
 
-    # Faqat video_id'larni olamiz (ko'rilganlar)
-    korilgan_idlar = list(
-        WatchedModel.objects.filter(user=user, watched=True).values_list("video_id", flat=True)
-    )
+    # Use cache for watched IDs
+    cache_key = f'watched_ids_{category}_{user_id}'
+    korilgan_idlar = cache.get(cache_key)
+    
+    if korilgan_idlar is None:
+        # Faqat video_id'larni olamiz (ko'rilganlar)
+        korilgan_idlar = list(
+            WatchedModel.objects.filter(user=user, watched=True).values_list("video_id", flat=True)
+        )
+        cache.set(cache_key, korilgan_idlar, 300)  # Cache for 5 minutes
 
-    # Videolar va ularning order bo'yicha eng kichigi
-    videolar = VideoModel.objects.all()
+    # Use select_related to reduce database queries
+    videolar = VideoModel.objects.all().select_related()
     min_order = VideoModel.objects.aggregate(min_order=Min("order"))["min_order"]
+
+    # Prepare a dictionary of watched videos for faster lookup
+    watched_dict = {}
+    if korilgan_idlar:
+        watched_videos = WatchedModel.objects.filter(
+            user=user, 
+            video_id__in=[v.id for v in videolar]
+        ).select_related('video')
+        
+        for watched in watched_videos:
+            watched_dict[watched.video_id] = {
+                'watch_count': watched.watch_count,
+                'watched': watched.watched
+            }
 
     # Har bir video uchun "ko'rish mumkin" flagini belgilaymiz
     for video in videolar:
         video.can_watch = video.order == min_order or video.order - 1 in [
             v.order for v in VideoModel.objects.filter(id__in=korilgan_idlar)
         ]
-        # Add watch count for each video
-        try:
-            watched = WatchedModel.objects.get(user=user, video=video)
-            video.watch_count = watched.watch_count
-            video.watched = watched.watched
-        except WatchedModel.DoesNotExist:
+        # Add watch count for each video from our dictionary
+        if video.id in watched_dict:
+            video.watch_count = watched_dict[video.id]['watch_count']
+            video.watched = watched_dict[video.id]['watched']
+        else:
             video.watch_count = 0
             video.watched = False
 
-    cache_key = f'video_list_{category}_{user_id}'
-    context = cache.get(cache_key)
-    
-    if not context:
-        context = {"videos": videolar, "category": category}
-        cache.set(cache_key, context, 120)  # Cache for 2 minutes
-        
+    context = {"videos": videolar, "category": category}
     return render(request, "video_list.html", context)
 
 # ▶️ Video ko'rish (va uni "ko'rilgan" deb belgilash)
