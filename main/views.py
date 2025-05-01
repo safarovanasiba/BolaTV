@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Min
 from django.views.generic import TemplateView
 from django.contrib.auth.hashers import check_password
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 
 from .models import *
@@ -217,3 +217,11 @@ class Home(TemplateView):
         if 'user_id' in request.session:
             return HttpResponseRedirect(reverse('dashboard'))
         return super().dispatch(request, *args, **kwargs)
+
+def index(request):
+    """Main homepage view"""
+    return render(request, 'index.html')
+
+def simple_text_response(request):
+    """A simple text response that doesn't require templates"""
+    return HttpResponse("BolaTV is running. Visit /admin/ for administration.", content_type="text/plain")

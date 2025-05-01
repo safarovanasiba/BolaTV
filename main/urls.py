@@ -59,4 +59,9 @@ urlpatterns = [
     
     # Video categories - using a catch-all pattern for compatibility with templates
     path("<str:category>/", video_list, name="video_list"),
+
+    # New paths
+    path("", views.index, name="index"),
+    path("text/", views.simple_text_response, name="simple_text_response"),
+    path("health-check/", health_check, name="app_health_check"),
 ]

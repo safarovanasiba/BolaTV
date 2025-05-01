@@ -21,6 +21,12 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from main.views import dashboard
+from django.http import HttpResponse
+from main.debug_views import health_check
+
+def simple_health(request):
+    """A very basic health check that will always succeed"""
+    return HttpResponse("OK", content_type="text/plain")
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -47,4 +53,28 @@ urlpatterns = [
     
     # Main app URLs - this must come last
     path("", include('main.urls')),
+    path("health/", health_check, name="health_check"),
+    path("ping/", simple_health, name="simple_health"),
 ]
+
+# Add DRF and Swagger UI only when DEBUG is True
+from django.conf import settings
+if settings.DEBUG:
+    from rest_framework import permissions
+    from drf_yasg.views import get_schema_view
+    from drf_yasg import openapi
+    
+    schema_view = get_schema_view(
+        openapi.Info(
+            title="BolaTV API",
+            default_version='v1',
+            description="API documentation for BolaTV",
+        ),
+        public=True,
+        permission_classes=(permissions.AllowAny,),
+    )
+    
+    urlpatterns += [
+        path('api-docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+        path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    ]
