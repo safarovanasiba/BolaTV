@@ -27,10 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-default-key-for-development')
 
-# Make DEBUG=True temporarily for debugging
-DEBUG = os.environ.get("DEBUG", "True") == "True"
+# Turn off DEBUG in production for better performance
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-# Allow all hosts temporarily for debugging
+# Allow all hosts but be specific about CSRF trusted origins for security
 ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -83,7 +83,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
-        conn_max_age=600
+        conn_max_age=600,
+        conn_health_checks=True
     )
 }
 
@@ -133,8 +134,15 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),  # ✅ Statik fayllarni yuklash
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
-# Update CSRF settings to be more lenient during testing
-CSRF_TRUSTED_ORIGINS = [f'https://{host}' for host in ALLOWED_HOSTS if '.' in host]
-CSRF_TRUSTED_ORIGINS.extend(['https://*.railway.app', 'https://*.up.railway.app'])
+# Add caching - this will greatly improve performance
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
+# Update CSRF settings for security
+CSRF_TRUSTED_ORIGINS = ['https://*.railway.app', 'https://*.up.railway.app']

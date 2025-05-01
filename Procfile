@@ -1,1 +1,1 @@
-web: python manage.py ensure_superuser && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi --workers 4 --timeout 60
+web: python manage.py ensure_superuser && python manage.py collectstatic --noinput && gunicorn config.wsgi --workers 4 --worker-class gthread --threads 2 --timeout 60
