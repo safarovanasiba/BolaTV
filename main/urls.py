@@ -28,8 +28,11 @@ router.register('test-results', TestResultViewSet)
 
 # Main URL patterns
 urlpatterns = [
-    # Add health check endpoint at the top
+    # Health check endpoint - must be at the top for Railway
     path("health/", health_check, name="health_check"),
+    path("healthz/", health_check, name="healthz"),  # Alternative path
+    path("ready/", health_check, name="ready"),      # Kubernetes-style readiness
+    path("live/", health_check, name="live"),        # Kubernetes-style liveness
     
     # Authentication endpoints
     path("login/", login_view, name="login"),

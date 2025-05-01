@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 import os
 import sys
 import logging
+import traceback
 
 # Set up logging
 logging.basicConfig(
@@ -26,13 +27,19 @@ try:
     logging.info("WSGI application initialized successfully")
 except Exception as e:
     logging.error(f"Error initializing WSGI application: {e}")
+    traceback.print_exc()
     
     # Return a minimal working application for debugging
     def minimal_application(environ, start_response):
         status = '500 Internal Server Error'
-        output = f'Error in WSGI application: {e}'.encode()
-        response_headers = [('Content-type', 'text/plain'),
-                           ('Content-Length', str(len(output)))]
+        error_msg = f'Error in WSGI application: {e}\n\n'
+        error_msg += traceback.format_exc()
+        output = error_msg.encode()
+        response_headers = [
+            ('Content-type', 'text/plain'),
+            ('Content-Length', str(len(output))),
+            ('X-Error-Source', 'WSGI Initialization')
+        ]
         start_response(status, response_headers)
         return [output]
     

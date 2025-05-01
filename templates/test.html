@@ -1,21 +1,125 @@
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <meta charset="UTF-8">
-    <title>Test</title>
-</head>
-<body>
-    <h2>Test Savollari</h2>
+{% extends 'base.html' %}
 
-    <form method="post">
+{% block title %}Test - Bola TV{% endblock %}
+
+{% block content %}
+<div class="test-container">
+    <h2 class="test-title">Test Savollari</h2>
+
+    {% if form.errors %}
+    <div class="error-message">
+        <p>Iltimos, barcha savollarga javob bering</p>
+    </div>
+    {% endif %}
+
+    <form method="post" class="test-form">
         {% csrf_token %}
-        {{ form.as_p }}
+        
+        {% for field in form %}
+            <div class="question-container">
+                <h3 class="question-text">{{ field.label }}</h3>
+                <div class="options-container">
+                    {{ field }}
+                </div>
+                {% if field.errors %}
+                <div class="field-error">{{ field.errors.0 }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
 
-        <button type="submit">Testni Yuborish</button>
+        <div class="test-actions">
+            <button type="submit" class="test-submit-btn">Testni Yuborish</button>
+            <a href="{% url 'dashboard' %}" class="test-back-btn">Ortga</a>
+        </div>
     </form>
+</div>
 
-    <a href="{% url 'dashboard' %}">
-        <button>Ortga</button>
-    </a>
-</body>
-</html>
+<style>
+    .test-container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .test-title {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .error-message {
+        background-color: #ffebee;
+        color: #c62828;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+    }
+    
+    .question-container {
+        margin-bottom: 30px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 20px;
+    }
+    
+    .question-text {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    
+    .options-container {
+        margin-left: 20px;
+    }
+    
+    .options-container ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .options-container li {
+        margin-bottom: 10px;
+    }
+    
+    .options-container input[type="radio"] {
+        margin-right: 10px;
+    }
+    
+    .field-error {
+        color: #c62828;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+    
+    .test-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+    
+    .test-submit-btn, .test-back-btn {
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    
+    .test-submit-btn {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+    }
+    
+    .test-back-btn {
+        background-color: #f5f5f5;
+        color: #333;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        display: inline-block;
+        text-align: center;
+    }
+</style>
+{% endblock %}
