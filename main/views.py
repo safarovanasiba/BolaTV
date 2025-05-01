@@ -151,6 +151,10 @@ def watch_video(request, video_id, category):
     user = get_object_or_404(Users, id=user_id)
     video = get_object_or_404(VideoModel, id=video_id)
 
+    # Clear cache for this user's video list to ensure fresh data
+    cache_key = f'video_list_{category}_{user_id}'
+    cache.delete(cache_key)
+
     # Avvalgi videoni ko'rganmi yoki bu birinchi video ekanligini tekshiramiz
     korilgan_orderlar = list(
         VideoModel.objects.filter(
@@ -158,18 +162,24 @@ def watch_video(request, video_id, category):
         ).values_list("order", flat=True)
     )
 
+    # Always allow watching the video, but only mark as watched if conditions are met
+    watched_entry, created = WatchedModel.objects.get_or_create(user=user, video=video)
+    
+    # Increment watch count regardless of whether it's marked as watched
+    watched_entry.watch_count += 1
+    
+    # Mark as watched only if it's the first video or previous one was watched
     if video.order == 1 or (video.order - 1 in korilgan_orderlar):
-        # Video ko'rildi deb belgilaymiz
-        watched, created = WatchedModel.objects.get_or_create(user=user, video=video)
-        watched.watched = True
-        watched.watch_count += 1
-        watched.save()
-        return render(request, "watch_video.html", {"video": video, "category": category})
-
-    return render(request, "video_list.html", {
-        "error": "Avvalgi videoni ko'rmagansiz!",
-        "videos": VideoModel.objects.all(),
-        "category": category
+        watched_entry.watched = True
+    
+    # Always save to update the watch_count and watched_at timestamp
+    watched_entry.save()
+    
+    return render(request, "watch_video.html", {
+        "video": video, 
+        "category": category,
+        "watch_count": watched_entry.watch_count,
+        "watched": watched_entry.watched
     })
 
 # 📝 Ariza formasi

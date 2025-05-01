@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 
 from . import views
@@ -52,11 +52,12 @@ urlpatterns = [
     path('api-root/', api_root, name='api-root'),
     path('api/', include(router.urls)),
     
-    # Swagger documentation - explicitly exclude these paths
-    path('swagger/', dashboard, name='swagger'),
+    # Remove the problematic Swagger redirection
+    # path('swagger/', dashboard, name='swagger'),
     
-    # Video categories - using a catch-all pattern for compatibility with templates
-    path("<str:category>/", video_list, name="video_list"),
+    # IMPORTANT: Exclude Swagger from catch-all pattern
+    # Explicitly exclude paths that should be handled by the root URLconf
+    re_path(r'^(?!swagger|api-docs|redoc)(?P<category>[\w-]+)/$', video_list, name="video_list"),
 
     # Health check endpoint
     path("health-check/", health_check, name="app_health_check"),

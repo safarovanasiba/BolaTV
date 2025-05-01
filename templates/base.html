@@ -56,6 +56,7 @@
             bottom: 20px;
             right: 20px;
             z-index: 999;
+            display: none;
         }
         
         @media (max-width: 768px) {
@@ -63,6 +64,84 @@
                 width: 40px;
                 height: 40px;
             }
+        }
+        
+        /* User info styles */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-right: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px var(--shadow-hover);
+        }
+        
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .username {
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        
+        .user-badge {
+            background-color: var(--secondary-color);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+        
+        .logout-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+        
+        .logout-btn:hover {
+            background-color: var(--danger-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-hover);
+        }
+        
+        .logout-btn i {
+            margin-right: 6px;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
         }
     </style>
     
@@ -96,6 +175,65 @@
                         <i class="fa-brands fa-telegram mr-2"></i> <span>Obuna bo'lish</span>
                     </a>
                 </div>
+                <button id="menu" class="inline-block active:opacity-60 focus:outline-none md:hidden">
+                    <img src="{% static './img/img/menu.svg' %}" alt="Hamburger menu" width="55" height="55">
+                </button>
+            </div>
+            <nav class="hidden md:flex justify-center items-center px-5 py-3 bg-white rounded-lg shadow-md">
+                <ul class="flex flex-wrap gap-x-9">
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if request.path == '/dashboard/' %}text-green-600{% endif %}" href="{% url 'dashboard' %}">Bosh sahifa</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if 'ertaklar' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='ertaklar' %}">Ertaklar</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if 'multfilmlar' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='multfilmlar' %}">Multfilm</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if 'qoshiqlar' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='qoshiqlar' %}">Qo'shiqlar</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if 'matematika' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='matematika' %}">Qiziqarli matematika</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if 'ingliztili' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='ingliztili' %}">Ingliz tili</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if 'badantarbiya' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='badantarbiya' %}">Badantarbiya</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if 'rasmlar' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='rasmlar' %}">Rasm</a></li>
+                    <li><a class="text-xl font-medium transition-all duration-300 hover:text-green-600 {% if request.path == '/ariza/' %}text-green-600{% endif %}" href="{% url 'ariza_qoldirish' %}">Murojaat</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div id="open-menu" class="transition-all duration-500 -translate-x-full w-full fixed top-0 h-full z-50 md:hidden">
+            <button id="mob-exit" class="z-50 absolute top-7 right-5">
+                <img src="{% static './img/img/mob-exit.png' %}" alt="Exit icon" width="50" height="50">
+            </button>
+            <div id="overl" class="bg-white/20 fixed top-0 h-full w-full"></div>
+            <div class="flex flex-col max-w-[320px] h-full overflow-auto bg-white pt-5 px-6 pb-14 fixed">
+                <div class="pt-4 pb-5 border-b">
+                    <a class="font-serif font-bold text-2xl sm:text-3xl text-br-green" href="{% url 'dashboard' %}">Bola Tv</a>
+                </div>
+                {% if request.session.user_id %}
+                <div class="py-3 border-b">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="user-avatar">
+                            {{ request.session.username|first|upper }}
+                        </div>
+                        <div class="user-details">
+                            <span class="username">{{ request.session.username }}</span>
+                            {% if request.session.is_admin %}
+                            <span class="user-badge">Admin</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <a href="{% url 'logout' %}" class="logout-btn block w-full text-center">
+                        <i class="fa fa-sign-out-alt"></i> Chiqish
+                    </a>
+                </div>
+                {% endif %}
+                <ul id="mobile-nav" class="flex flex-col w-full h-auto border-b divide-y divide-dashed">
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if request.path == '/dashboard/' %}text-green-600{% endif %}" href="{% url 'dashboard' %}">Bosh sahifa</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if 'ertaklar' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='ertaklar' %}">Ertaklar</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if 'multfilmlar' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='multfilmlar' %}">Multfilm</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if 'qoshiqlar' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='qoshiqlar' %}">Qo'shiqlar</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if 'matematika' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='matematika' %}">Qiziqarli matematika</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if 'ingliztili' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='ingliztili' %}">Ingliz tili</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if 'badantarbiya' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='badantarbiya' %}">Badantarbiya</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if 'rasmlar' in request.path %}text-green-600{% endif %}" href="{% url 'video_list' category='rasmlar' %}">Rasm</a></li>
+                    <li class="py-1"><a class="inline-block w-full text-xl font-medium {% if request.path == '/ariza/' %}text-green-600{% endif %}" href="{% url 'ariza_qoldirish' %}">Murojaat</a></li>
+                </ul>
+                <a class="mt-5 bg-blue-200 px-5 py-2 rounded transition-all duration-300 hover:bg-green-300" href="https://t.me/bolatvuz" target="_blank">
+                    <i class="fa-brands fa-telegram mr-2"></i> <span>Obuna bo'lish</span>
+                </a>
             </div>
         </div>
     </header>
@@ -106,7 +244,7 @@
 
     <footer class="bg-slate-50 py-5 px-8 mt-5">
         <div class="container mx-auto text-center">
-            <p>© {% now "Y" %} BolaTV. All rights reserved.</p>
+            <p>Bola Tv 2025 | Andarov tomonidan yaratilgan</p>
         </div>
     </footer>
 
@@ -134,6 +272,28 @@
                     document.body.scrollTop = 0; // For Safari
                     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
                 });
+            }
+            
+            // Mobile menu functionality
+            const menuButton = document.getElementById('menu');
+            const mobileMenu = document.getElementById('open-menu');
+            const exitButton = document.getElementById('mob-exit');
+            const overlay = document.getElementById('overl');
+            
+            if (menuButton && mobileMenu && exitButton) {
+                menuButton.addEventListener('click', function() {
+                    mobileMenu.classList.remove('-translate-x-full');
+                });
+                
+                exitButton.addEventListener('click', function() {
+                    mobileMenu.classList.add('-translate-x-full');
+                });
+                
+                if (overlay) {
+                    overlay.addEventListener('click', function() {
+                        mobileMenu.classList.add('-translate-x-full');
+                    });
+                }
             }
         });
     </script>
