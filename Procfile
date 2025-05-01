@@ -1,1 +1,1 @@
-web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi --log-level debug --timeout 120
+web: python manage.py ensure_superuser && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi --workers 4 --timeout 60
